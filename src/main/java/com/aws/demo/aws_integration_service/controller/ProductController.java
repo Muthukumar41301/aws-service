@@ -1,5 +1,6 @@
 package com.aws.demo.aws_integration_service.controller;
 
+import com.aws.demo.aws_integration_service.entity.Products;
 import com.aws.demo.aws_integration_service.model.Product;
 import com.aws.demo.aws_integration_service.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,5 +53,18 @@ public class ProductController {
         return productService.deleteProduct(id) ?
                 ResponseEntity.noContent().build() :
                 ResponseEntity.notFound().build();
+    }
+
+    @Operation(summary = "Update Stock Procedure", description = "Update the Stock Procedure")
+    @PutMapping("/update/{productId}/{quantity}")
+    public Products updateStockProcedure(@PathVariable Integer productId,
+                                         @PathVariable Integer quantity){
+        return productService.updateStockProcedure(productId,quantity);
+    }
+
+    @Operation(summary = "Product Total Price", description = "Product Total Price")
+    @GetMapping("/total-price/{productId}")
+    public Double getTotalPrice(@PathVariable Integer productId) {
+        return productService.calculateProductPrice(productId);
     }
 }

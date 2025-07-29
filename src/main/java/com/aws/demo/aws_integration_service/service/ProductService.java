@@ -1,6 +1,9 @@
 package com.aws.demo.aws_integration_service.service;
 
+import com.aws.demo.aws_integration_service.entity.Products;
 import com.aws.demo.aws_integration_service.model.Product;
+import com.aws.demo.aws_integration_service.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +14,9 @@ import java.util.Optional;
 public class ProductService {
     private final List<Product> productList = new ArrayList<>();
     private int nextId = 1;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public Product addProduct(Product product) {
         product.setId(nextId++);
@@ -39,5 +45,14 @@ public class ProductService {
 
     public boolean deleteProduct(int id) {
         return productList.removeIf(p -> p.getId() == id);
+    }
+
+    public Products updateStockProcedure(Integer productId, Integer quantity) {
+        productRepository.updateStockProcedure(productId,quantity);
+        return productRepository.findById(productId).get();
+    }
+
+    public Double calculateProductPrice(Integer productId) {
+        return productRepository.getTotalPrice(productId);
     }
 }

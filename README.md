@@ -43,3 +43,42 @@ Performance: Stored procedures sometimes run faster because the database can opt
 Security: You can permit to run a stored procedure without allowing direct access to the underlying tables.
 
 Reusability: If many applications or parts of your code need the same SQL logic, you can store it in a procedure or function and call it whenever you want
+
+# 🔁 Transaction Propagation in Spring Boot
+
+## 📘 Overview
+
+**Transaction Propagation** defines how transactional methods behave when called within an existing transaction. It controls whether a method joins an existing transaction or starts a new one.
+
+---
+
+## 🧩 Propagation Types in Spring
+
+| Propagation Type     | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| `REQUIRED`           | Joins the current transaction if it exists; creates a new one otherwise. **(Default)** |
+| `REQUIRES_NEW`       | Suspends the current transaction and always starts a new one.               |
+| `NESTED`             | Executes within a nested transaction using savepoints (requires JDBC support). |
+| `SUPPORTS`           | Joins the current transaction if it exists; otherwise runs non-transactionally. |
+| `NOT_SUPPORTED`      | Always runs non-transactionally, suspending any existing transaction.       |
+| `NEVER`              | Must run outside of a transaction. Throws exception if a transaction exists. |
+| `MANDATORY`          | Must run inside an existing transaction. Throws exception if none exists.   |
+
+---
+
+## ✅ Usage Example
+
+```java
+@Service
+public class PaymentService {
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void processPayment() {
+        // Joins or starts a transaction
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void updateAuditLog() {
+        // Always runs in a new transaction
+    }
+}

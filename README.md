@@ -82,3 +82,30 @@ public class PaymentService {
         // Always runs in a new transaction
     }
 }
+```
+---
+
+# 🔒 Transaction Isolation in Spring Boot
+
+## 📘 What is Transaction Isolation?
+
+**Transaction Isolation** defines the level of visibility a transaction has to the changes made by other concurrent transactions. It is crucial for ensuring **data consistency and correctness** in multi-user environments, especially in systems that run multiple transactions at the same time.
+
+In Spring Boot, you can set the isolation level using the `@Transactional` annotation:
+
+```java
+@Transactional(isolation = Isolation.READ_COMMITTED)
+public void execute() {
+    // business logic
+}
+```
+
+## 🧪 Isolation Levels Comparison
+
+| Isolation Level       | Type         | Level Rank   | Description                                                                  | Prevents Anomalies                        | Common Use Case                              |
+|------------------------|--------------|---------------|------------------------------------------------------------------------------|--------------------------------------------|-----------------------------------------------|
+| `READ_UNCOMMITTED`     | Read          | 🟥 Lowest     | Allows reading uncommitted changes (dirty reads).                            | ❌ None                                     | High-performance analytics, cache warm-up     |
+| `READ_COMMITTED`       | Read          | 🟨 Low        | Only committed data is visible; dirty reads are prevented.                   | ✅ Dirty Reads                              | Product listings, user profile reads          |
+| `REPEATABLE_READ`      | Read          | 🟧 Medium     | Prevents updates to rows read during the transaction.                        | ✅ Dirty Reads, ✅ Non-repeatable Reads     | Bank balances, order validation               |
+| `SERIALIZABLE`         | Read/Write    | 🟩 Highest    | Full isolation; transactions behave as if run sequentially.                  | ✅ Dirty, ✅ Non-repeatable, ✅ Phantom     | Ticket booking, inventory stock consistency   |
+| `DEFAULT`              | DB-dependent  | ℹ️ Varies     | Uses the database engine’s default isolation level.                          | ℹ️ Depends on DB                            | When isolation is not explicitly defined      |

@@ -8,7 +8,7 @@ CICD - flow
 update_stock:
 --------------
 ```
-CREATE PROCEDURE javatechie.update_stock(
+CREATE PROCEDURE update_stock(
 	IN productId INT,
     IN quantity INT
     )
@@ -21,7 +21,7 @@ END
 get_total_price:
 ----------------
 ```
-CREATE FUNCTION javatechie.get_total_price(productId INT)
+CREATE FUNCTION get_total_price(productId INT)
 RETURNS DECIMAL(10,2)
 DETERMINISTIC
 READS SQL DATA
